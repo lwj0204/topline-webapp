@@ -7,7 +7,16 @@
 -->
   <div class="home">
     <!-- 导航栏 -->
-    <van-nav-bar title="首页" fixed/>
+    <van-nav-bar fixed>
+      <van-button
+      class="search-btn"
+      round
+      type="info"
+      slot="title"
+      size="small"
+      @click="$router.push('/search')"
+      >搜索</van-button>
+    </van-nav-bar>
     <!-- 频道列表 -->
     <van-tabs v-model="active" animated swipeable>
       <div slot="nav-right" class="wap-nav" @click="isChannelShow = true">
@@ -67,8 +76,9 @@
           </van-button>
         </van-cell>
         <van-grid :gutter="10">
+          <van-grid-item text="推荐" @click="switchChannel(0)"/>
           <van-grid-item
-            v-for="(channel,index) in channels"
+            v-for="(channel,index) in channels.slice(1)"
             :key="index"
             :text="channel.name"
             @click="onMyChannelClick(index)"
@@ -221,13 +231,15 @@ export default {
         channels = data.data.channels
       }
 
-      channels.forEach(channel => {
-        channel.articles = [] // 存储频道的文章列表
-        channel.finished = false // 存储频道的加载结束状态
-        channel.loading = false // 存储频道的加载更多 loading 状态
-        channel.timestamp = null // 存储获取频道下一页的时间戳
-        channel.isPullDownLoading = false // 存储频道的下拉刷新loading状态
-      })
+      // channels.forEach(channel => {
+      //   channel.articles = [] // 存储频道的文章列表
+      //   channel.finished = false // 存储频道的加载结束状态
+      //   channel.loading = false // 存储频道的加载更多 loading 状态
+      //   channel.timestamp = null // 存储获取频道下一页的时间戳
+      //   channel.isPullDownLoading = false // 存储频道的下拉刷新loading状态
+      // })
+      // 根据需要扩展自定义数据 满足需求
+      this.extengData(channels)
 
       // 最后把数据更新到组件中
       this.channels = channels
@@ -253,8 +265,17 @@ export default {
     // 获取所有频道列表
     async loadAllChannels () {
       const { data } = await getAllChannels()
+      const channels = data.data.channels
+      this.extengData(channels)
+      // channels.forEach(channel => {
+      //   channel.articles = [] // 存储频道的文章列表
+      //   channel.finished = false // 存储频道的加载结束状态
+      //   channel.loading = false // 存储频道的加载更多 loading 状态
+      //   channel.timestamp = null // 存储获取频道下一页的时间戳
+      //   channel.isPullDownLoading = false // 存储频道的下拉刷新loading状态
+      // })
       // console.log(data)
-      this.allChannels = data.data.channels
+      this.allChannels = channels
     },
     // 添加频道
     onAddChannel (channel) {
@@ -268,10 +289,27 @@ export default {
       } else {
         // 如果是非编辑状态，切换频道展示
         // 切换频道展示
-        this.active = index
-        // 关闭弹层
-        this.isChannelShow = false
+        // this.active = index
+        // // 关闭弹层
+        // this.isChannelShow = false
+        // 这个数组不包括“推荐”频道
+        this.switchChannel(index + 1)
       }
+    },
+    // 切换频道
+    switchChannel (index) {
+      this.active = index
+      // 关闭弹层
+      this.isChannelShow = false
+    },
+    extengData (channels) {
+      channels.forEach(channel => {
+        channel.articles = [] // 存储频道的文章列表
+        channel.finished = false // 存储频道的加载结束状态
+        channel.loading = false // 存储频道的加载更多 loading 状态
+        channel.timestamp = null // 存储获取频道下一页的时间戳
+        channel.isPullDownLoading = false // 存储频道的下拉刷新loading状态
+      })
     }
   }
 }
@@ -287,6 +325,10 @@ export default {
       margin-right: 10px;
     }
   }
+.search-btn {
+  width:100%;
+  background-color: #5babfb;
+}
   // 展示频道的菜单列表
 .wap-nav {
     position: sticky;
