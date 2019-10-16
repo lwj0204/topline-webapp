@@ -2,13 +2,26 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import './utils/datetime'
 import {
   NavBar,
   Button,
   Field,
   Cell,
   CellGroup,
-  Toast
+  Toast,
+  Tabbar,
+  TabbarItem,
+  Tab,
+  Tabs,
+  List,
+  PullRefresh,
+  Grid,
+  GridItem,
+  Image,
+  Lazyload,
+  Popup,
+  Icon
 } from 'vant'
 
 import './styles/index.less'
@@ -48,6 +61,18 @@ Vue
   .use(Cell)
   .use(CellGroup)
   .use(Toast)
+  .use(Tabbar)
+  .use(TabbarItem)
+  .use(Tab)
+  .use(Tabs)
+  .use(List)
+  .use(PullRefresh)
+  .use(Grid)
+  .use(GridItem)
+  .use(Image)
+  .use(Lazyload)
+  .use(Popup)
+  .use(Icon)
 
 Vue.config.productionTip = false
 

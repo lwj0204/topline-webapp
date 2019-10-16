@@ -48,7 +48,7 @@
 // import request from '@/utils/request'
 
 import { login } from '@/api/user'
-
+import { setItem } from '@/utils/storage'
 export default {
   name: 'LoginIndex',
   data () {
@@ -93,6 +93,13 @@ export default {
         //   duration: 2000,
         //   message: '登录成功'
         // })
+
+        // 登录成功，将 token 存储
+        this.$store.commit('setUser', data.data)
+
+        // 为了防止页面刷新数据丢失，我们需要把数据放到本地存储
+        setItem('user', data.data)
+
         this.$toast.success('登录成功')
       } catch (err) {
         // toast.clear()
